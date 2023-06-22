@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier{% endblock %} {% block body %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Prix unitaire</th>
+            <th>Quantité</th>
+            <th>Prix total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ligne in panier.produits %}
+        <tr>
+            <td>
+                <img src="{{ ligne.produit.image }}" alt="" style="width: 50px; height: 50px; object-fit: contain">
+                {{ ligne.produit.nom }}
+            </td>
+            <td>{{ ligne.produit.prix }}&nbsp;€</td>
+            <td>{{ ligne.quantite }}</td>
+            <td>{{ ligne.quantite * ligne.produit.prix }}&nbsp;€</td>
+            <td>
+                <a href="{{path('app_panier_remove', {produit: ligne.produit.id})}}" class="btn btn-danger">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">Aucun produit dans votre panier</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<dl class="row">
+    <div class="col-3">
+        <dt>Total HT</dt>
+        <dd>{{panier.total.ht}}&nbsp;€</dd>
+    </div>
+
+    <div class="col-3">
+        <dt>TVA</dt>
+        <dd>{{panier.total.tva}}&nbsp;€</dd>
+    </div>
+
+    <div class="col-3">
+        <dt>Total TTC</dt>
+        <dd>{{panier.total.ttc}}&nbsp;€</dd>
+    </div>
+
+    <a href="{{ path('app_paiement') }}"
+        class="btn btn-primary col-2 offset-col-1 d-flex justify-content-center align-items-center">
+        <span>
+            <i class="fa fa-credit-card-alt" aria-hidden="true"></i> Payer
+        </span>
+    </a>
+</dl>
+
+
+<div class="row">
+    <a class="nav-link" href="{{ path('app_panier_vider') }}">Vider le panier</a>
+</div>
+{% endblock %}
